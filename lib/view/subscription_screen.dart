@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:temp_project/view/main_screen.dart';
 import 'package:temp_project/viewmodels/subscription_viewmodel.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -9,86 +10,204 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-  late final SubscriptionViewModel _viewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = SubscriptionViewModel();
-  }
+  final SubscriptionViewModel _viewModel = SubscriptionViewModel();
+  String? _selectedPlan;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Подписка')),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          width: 300,
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Оформите подписку', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              const Text('- безлимитный доступ ко всем 3д моделям\n- возможность выкладывать и продавать свои модели', textAlign: TextAlign.center),
-              const SizedBox(height: 30),
-              _buildSubscriptionCard('30', Colors.purple, _viewModel.selectedPlan?.plan == '30'),
-              const SizedBox(height: 20),
-              _buildSubscriptionCard('365', Colors.green, _viewModel.selectedPlan?.plan == '365'),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () => _handlePremiumButton(),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-                child: const Text('Подключить премиум'),
-              ),
-              const SizedBox(height: 20),
-              const Text('Условия подписки...', style: TextStyle(fontSize: 10)),
-            ],
-          ),
-        ),
+      appBar: AppBar(
+        title: const Text('Выберите тариф'),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
-    );
-  }
-
-  Widget _buildSubscriptionCard(String days, Color color, bool isSelected) {
-    return InkWell(
-      onTap: () => _viewModel.selectPlan(days),
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-          border: isSelected ? Border.all(color: Colors.white, width: 3) : null,
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: Colors.grey[100],
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(days, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white)),
-                const Text('ДНЕЙ', style: TextStyle(fontSize: 14, color: Colors.white)),
-              ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  final plan = index == 0 ? '30' : '365';
+                  final isYearly = plan == '365';
+                  final price = _viewModel.getPriceByPlan(plan);
+                  final oldPrice = isYearly ? '6 990₽' : null;
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedPlan = plan;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                        border: _selectedPlan == plan
+                            ? Border.all(color: Colors.purple, width: 2)
+                            : null,
+                      ),
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, 
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .center,
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .start, 
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 0,
+                                    ), 
+                                    child: Text(
+                                      plan,
+                                      style: TextStyle(
+                                        fontFamily: 'Iceland',
+                                        fontSize: 80,
+                                        fontWeight: FontWeight.bold,
+                                        color: _selectedPlan == plan
+                                            ? Color.fromARGB(255, 83, 58, 113)
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 0,
+                                      top: 0,
+                                    ), 
+                                    child: Text(
+                                      'дней',
+                                      style: TextStyle(
+                                        fontSize: 32,
+                                        color: _selectedPlan == plan
+                                            ? Color.fromARGB(255, 83, 58, 113)
+                                            : Colors.grey[600],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Column(
+                                children: [
+                                  if (oldPrice != null) ...[
+                                    Text(
+                                      oldPrice,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.red,
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
+                                  Text(
+                                    price,
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: _selectedPlan == plan
+                                          ? Colors.purple
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          if (isYearly) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              'Экономия 2 000₽',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            Text(_viewModel.getPriceByPlan(days), style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white)),
-            if (isSelected) const Icon(Icons.check, color: Colors.white, size: 24),
+            SizedBox(
+              height: 60,
+              child: ElevatedButton(
+                onPressed: _selectedPlan != null ? _handleSubscribe : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 15,
+                  ),
+                ),
+                child: const Text(
+                  'Подключить премиум',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Условия подписки: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        'подписка «Премиум» даёт доступ к функциям, указанных в ст. 1 условия пользовательского соглашения, подписка является автообновляемой в соответствии со ст.5 пункт 3266 пользовательского соглашения',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.left,
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _handlePremiumButton() {
-    if (_viewModel.selectedPlan != null) {
-      // Логика подключения премиум
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Подписка ${_viewModel.selectedPlan!.plan} дней оформлена!')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите тариф!')),
-      );
-    }
+  Future<void> _handleSubscribe() async {
+    if (_selectedPlan == null) return;
+
+    await _viewModel.selectPlan(_selectedPlan!);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen()),
+    );
   }
 }

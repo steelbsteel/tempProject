@@ -6,7 +6,7 @@ class SubscriptionViewModel {
   final String _selectedPlanKey = 'selected_plan'; 
 
   String getPriceByPlan(String plan){
-    return plan == "30" ? '590' : '4990';
+    return plan == "30" ? '590₽' : '4 990₽';
   }
 
   Future<void> selectPlan(String plan) async{
