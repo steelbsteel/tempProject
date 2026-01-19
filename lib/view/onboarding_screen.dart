@@ -33,7 +33,9 @@ class Onboarding extends StatelessWidget {
                             )
                           ),
                           child: Text("Продолжить"),
-                          onPressed: () => ()
+                          onPressed: () => {
+                            Navigator.pushNamed(context, '/paywall')
+                            }
                           ),
                       )
                     ],

@@ -1,8 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:temp_project/models/paywall_model.dart';
+import 'package:temp_project/models/subscription_model.dart';
 
 class SubscriptionViewModel {
-  SubscriptionModel? _selectedPlan;
+  SubscriptionModel? selectedPlan;
   final String _selectedPlanKey = 'selected_plan'; 
 
   String getPriceByPlan(String plan){
@@ -12,7 +12,7 @@ class SubscriptionViewModel {
   Future<void> selectPlan(String plan) async{
     final prefs = await SharedPreferences.getInstance();
     final savedPlan = prefs.getString(_selectedPlanKey);
-    _selectedPlan = SubscriptionModel(
+    selectedPlan = SubscriptionModel(
       plan: plan, 
       price: getPriceByPlan(plan), 
       isSelected: true

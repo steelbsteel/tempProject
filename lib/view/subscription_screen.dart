@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:temp_project/viewmodels/paywall_viewmodel.dart';
+import 'package:temp_project/viewmodels/subscription_viewmodel.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
