@@ -10,31 +10,14 @@ void main() {
 }
 
 class ModelHubApp extends StatelessWidget {
-  ModelHubApp({super.key});
+  const ModelHubApp({super.key});
 
-  final SubscriptionViewModel _viewModel = SubscriptionViewModel();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "ModelHub",
-      home: FutureBuilder<bool>(
-        future: _viewModel.hasSub(), // проверяем подписку
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!) {
-              return MainScreen(); // есть подписка → главный экран
-            } else {
-              return Onboarding(); // нет подписки → онбординг
-            }
-          } else {
-            // пока идёт проверка — показываем индикатор
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-        },
-      ),
+      home: Onboarding(), // Всегда онбординг при запуске
       routes: {
         '/onboarding': (context) => Onboarding(),
         '/paywall': (context) => SubscriptionScreen(),
