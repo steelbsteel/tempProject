@@ -17,12 +17,15 @@ class Onboarding extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Text(
-                    "Model Hub",
-                    style: TextStyle(
-                      fontFamily: 'Iceland',
-                      fontSize: 80,
-                      color: Color.fromARGB(255, 83, 58, 113),
+                  GestureDetector(
+                    onDoubleTap: _viewModel.resetSubscription,
+                    child: Text(
+                      "Model Hub",
+                      style: TextStyle(
+                        fontFamily: 'Iceland',
+                        fontSize: 80,
+                        color: Color.fromARGB(255, 83, 58, 113),
+                      ),
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.35),
