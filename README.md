@@ -1,16 +1,57 @@
-# temp_project
+# Model Hub
 
-A new Flutter project.
+Проект предназначен для обзора и скачивания 3д моделей между пользователями. Оплачивая подписку пользователь получает возможность просматривать, скачивать 3д модели других игроков, а также заливать свои модели.
 
-## Getting Started
+Архитектура
+Проект построен по принципу чистой архитектуры (Clean Architecture) с разделением на слои:
 
-This project is a starting point for a Flutter application.
+Models: модели экранов для mvvm паттерна.
+Viewmodels: вся логика экранов.
+View: UI экранов.
+Fonts: нестандартные шрифты.
+Assets: фотографии.
 
-A few resources to get you started if this is your first Flutter project:
+Структура проекта  
+assets/  
+├── cyberpunk_girl.png         # Стандартный asset для всех image виджетов  
+fonts/  
+├── Iceland-Regular.ttf        # Шрифт для названия компании на onboarding-экране  
+lib/  
+├── models                     # Модели экранов  
+│   └── subscription_model.dart  
+├── view                       # UI экранов  
+│   ├── main_screen.dart  
+│   ├── onboarding_screen.dart  
+│   └── subscription_screen.dart  
+├── view_models                # Логика экранов  
+│   └── subscription_viewmodel.dart  
+└── main.dart                  # Точка входа  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+Что бы улучшил при большем времени:
+
+Тестирование  
+-Добавить unit‑тесты для use cases и репозиториев;  
+-Покрыть интеграционными тестами ключевые сценарии.  
+  
+Состояние приложения  
+-Внедрить flutter_bloc или provider для управления состоянием;  
+-Реализовать загрузку, ошибки, перезапрос данных.  
+  
+Производительность  
+-Оптимизировать перестройку виджетов (например, const‑виджеты);  
+-Кэшировать данные на уровне репозитория.  
+  
+UX/UI  
+-Добавить анимации перехода между экранами;  
+-Реализовать тёмную/светлую тему;  
+-Улучшить адаптивность под планшеты и большие экраны.  
+  
+Инфраструктура  
+-Настроить CI/CD (автоматическая сборка, тесты, деплой);  
+-Добавить логирование и мониторинг ошибок.  
+  
+Документация  
+-Расписать API endpoints в README или отдельном файле;  
+-Добавить комментарии к сложным алгоритмам в коде.  
